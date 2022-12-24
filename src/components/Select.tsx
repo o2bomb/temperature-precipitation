@@ -1,7 +1,7 @@
-import { HTMLAttributes } from "react";
+import { SelectHTMLAttributes } from "react";
 import styled from "styled-components";
 
-interface LabelledSelectProps extends HTMLAttributes<HTMLSelectElement> {
+interface LabelledSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
     id: string;
     label: string;
 }

@@ -1,88 +1,41 @@
-import { useState } from "react";
-import {
-    Area,
-    AreaChart,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from "recharts";
+import { useEffect, useState } from "react";
 import Box from "../components/Box";
 import Button from "../components/Button";
 import LabelledSelect from "../components/Select";
 import { Toggle } from "../components/Toggle";
-
-enum PeriodEnum {
-    Option1 = "2020-2039",
-    Option2 = "2040-2059",
-    Option3 = "2060-2079",
-    Option4 = "2080-2099",
-}
-
-enum RegionEnum {
-    Croatia = "Croatia",
-    Slovenia = "Slovenia",
-    Serbia = "Serbia",
-    BosniaHerzegovina = "Bosnia & Herzegovina",
-    Montenegro = "Montenegro",
-    Macedonia = "Macedonia",
-    Yugoslavia = "Yugoslavia",
-}
-
-enum ViewEnum {
-    Temperature = "Temperature",
-    Precipitation = "Precipitation",
-}
+import getWeather, { AnnualData } from "../helpers/getWeather";
+import { COUNTRY_DATA } from "../pure/country";
+import { CountryEnum, PeriodEnum, ViewEnum } from "../pure/enums";
 
 const Annual = () => {
+    // todo read from url params
     const [view, setView] = useState(ViewEnum.Temperature);
+    const [country, setCountry] = useState(CountryEnum.Croatia);
+    const [period, setPeriod] = useState(PeriodEnum.Option1);
 
-    const data = [
-        {
-            name: "Page A",
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
-        },
-        {
-            name: "Page B",
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
-        },
-        {
-            name: "Page C",
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
-        },
-        {
-            name: "Page D",
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: "Page E",
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: "Page F",
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: "Page G",
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
-    ];
+    const [data, setData] = useState<AnnualData>();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>();
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true);
+            try {
+                const resp = await getWeather("annualavg", country, view, period);
+                console.log(resp);
+                setData(resp);
+                setError(undefined);
+            } catch (e) {
+                if (typeof e === "string") {
+                    setError(e);
+                } else if (e instanceof Error) {
+                    setError(e.message);
+                }
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [country, period, view]);
 
     return (
         <>
@@ -100,16 +53,35 @@ const Annual = () => {
                                 letterSpacing: 1,
                             }}
                         >
-                            Croatia ※
+                            {COUNTRY_DATA[country].flag} {COUNTRY_DATA[country].label}
                         </h1>
                         <p
                             style={{
                                 fontSize: "1rem",
                             }}
                         >
-                            45.1000° N, 15.2000° E
+                            {COUNTRY_DATA[country].long_lat}
                         </p>
                     </div>
+                    <a
+                        href="/monthly"
+                        style={{
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            textAlign: "right",
+                        }}
+                    >
+                        Annual
+                        <span
+                            style={{
+                                display: "block",
+                                color: "#6b7280",
+                                fontSize: "1rem",
+                            }}
+                        >
+                            Click to view monthly data
+                        </span>
+                    </a>
                 </div>
             </Topbar>
             <Main>
@@ -141,7 +113,7 @@ const Annual = () => {
                         marginRight: "-1rem",
                     }}
                 >
-                    <ResponsiveContainer width="100%" height={600}>
+                    {/* <ResponsiveContainer width="100%" height={600}>
                         <AreaChart
                             data={data}
                             margin={{
@@ -182,7 +154,7 @@ const Annual = () => {
                                 fill="url(#colorPv)"
                             />
                         </AreaChart>
-                    </ResponsiveContainer>
+                    </ResponsiveContainer> */}
                 </div>
                 <Box
                     direction="row"
@@ -192,30 +164,40 @@ const Annual = () => {
                         marginTop: "1rem",
                     }}
                 >
-                    <LabelledSelect id="country" label="Country">
-                        <LabelledSelect.Option value={RegionEnum.Croatia}>
-                            {RegionEnum.Croatia}
+                    <LabelledSelect
+                        id="country"
+                        label="Country"
+                        value={country}
+                        onChange={(e) => setCountry(e.currentTarget.value as CountryEnum)}
+                    >
+                        <LabelledSelect.Option value={CountryEnum.Croatia}>
+                            {CountryEnum.Croatia}
                         </LabelledSelect.Option>
-                        <LabelledSelect.Option value={RegionEnum.Slovenia}>
-                            {RegionEnum.Slovenia}
+                        <LabelledSelect.Option value={CountryEnum.Slovenia}>
+                            {CountryEnum.Slovenia}
                         </LabelledSelect.Option>
-                        <LabelledSelect.Option value={RegionEnum.Serbia}>
-                            {RegionEnum.Serbia}
+                        <LabelledSelect.Option value={CountryEnum.Serbia}>
+                            {CountryEnum.Serbia}
                         </LabelledSelect.Option>
-                        <LabelledSelect.Option value={RegionEnum.BosniaHerzegovina}>
-                            {RegionEnum.BosniaHerzegovina}
+                        <LabelledSelect.Option value={CountryEnum.BosniaHerzegovina}>
+                            {CountryEnum.BosniaHerzegovina}
                         </LabelledSelect.Option>
-                        <LabelledSelect.Option value={RegionEnum.Montenegro}>
-                            {RegionEnum.Montenegro}
+                        <LabelledSelect.Option value={CountryEnum.Montenegro}>
+                            {CountryEnum.Montenegro}
                         </LabelledSelect.Option>
-                        <LabelledSelect.Option value={RegionEnum.Macedonia}>
-                            {RegionEnum.Macedonia}
+                        <LabelledSelect.Option value={CountryEnum.Macedonia}>
+                            {CountryEnum.Macedonia}
                         </LabelledSelect.Option>
-                        <LabelledSelect.Option value={RegionEnum.Yugoslavia}>
-                            {RegionEnum.Yugoslavia}
+                        <LabelledSelect.Option value={CountryEnum.Yugoslavia}>
+                            {CountryEnum.Yugoslavia}
                         </LabelledSelect.Option>
                     </LabelledSelect>
-                    <LabelledSelect id="period" label="Period">
+                    <LabelledSelect
+                        id="period"
+                        label="Period"
+                        value={period}
+                        onChange={(e) => setPeriod(e.currentTarget.value as PeriodEnum)}
+                    >
                         <LabelledSelect.Option value={PeriodEnum.Option1}>
                             {PeriodEnum.Option1}
                         </LabelledSelect.Option>
