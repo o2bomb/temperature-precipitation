@@ -183,7 +183,7 @@ const Annual = () => {
                                 <stop
                                     offset="30%"
                                     stopColor={
-                                        view === ViewEnum.Temperature ? "#fb923c" : "#3b82f6"
+                                        view === ViewEnum.Temperature ? "#f59e0b" : "#38bdf8"
                                     }
                                     stopOpacity={0.9}
                                 />
@@ -269,33 +269,49 @@ const Annual = () => {
                 </div>
             </Topbar>
             <Main>
-                <div
+                <Box
+                    direction="row"
+                    spacing="2rem"
                     style={{
+                        alignItems: "baseline",
                         marginBottom: "1rem",
                     }}
                 >
-                    <label
+                    <p
                         style={{
-                            display: "inline-block",
-                            marginRight: "1rem",
-                            color: "#9ca3af",
+                            fontSize: "1.6rem",
                         }}
                     >
-                        View:
-                    </label>
-                    <Toggle
-                        options={[
-                            {
-                                value: ViewEnum.Temperature,
-                            },
-                            {
-                                value: ViewEnum.Precipitation,
-                            },
-                        ]}
-                        value={view}
-                        onChange={(key) => setView(key as ViewEnum)}
-                    />
-                </div>
+                        Years {period}
+                    </p>
+                    <div
+                        style={{
+                            marginLeft: "auto",
+                        }}
+                    >
+                        <label
+                            style={{
+                                display: "inline-block",
+                                marginRight: "1rem",
+                                color: "#9ca3af",
+                            }}
+                        >
+                            View:
+                        </label>
+                        <Toggle
+                            options={[
+                                {
+                                    value: ViewEnum.Temperature,
+                                },
+                                {
+                                    value: ViewEnum.Precipitation,
+                                },
+                            ]}
+                            value={view}
+                            onChange={(key) => setView(key as ViewEnum)}
+                        />
+                    </div>
+                </Box>
                 {content}
                 <Box
                     direction="row"
