@@ -1,5 +1,13 @@
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Box from "components/Box";
+import Button from "components/Button";
+import Main from "components/Layout/Main";
+import Topbar from "components/Layout/Topbar";
+import LabelledSelect from "components/Select";
+import { Toggle } from "components/Toggle";
+import { CommonData } from "helpers/getWeather";
+import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Bar,
@@ -11,13 +19,6 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import Box from "../components/Box";
-import Button from "../components/Button";
-import LabelledSelect from "../components/Select";
-import { Toggle } from "../components/Toggle";
-import { CommonData } from "../helpers/getWeather";
-import { COUNTRY_DATA } from "../pure/country";
-import { CountryEnum, PeriodEnum, ViewEnum } from "../pure/enums";
 
 interface CleanAnnualData extends CommonData {
     processedData: number;
@@ -112,8 +113,6 @@ const Annual = () => {
                 },
             ];
 
-            console.log("hasdf");
-            throw new Error("Failed to get weather data.");
             const processed: CleanAnnualData[] = [];
             resp.forEach((r: any) => {
                 if (r.annualData.length < 1) return;
@@ -235,51 +234,7 @@ const Annual = () => {
 
     return (
         <>
-            <Topbar>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <div>
-                        <h1
-                            style={{
-                                fontWeight: 600,
-                                letterSpacing: 1,
-                            }}
-                        >
-                            {COUNTRY_DATA[country].flag} {COUNTRY_DATA[country].label}
-                        </h1>
-                        <p
-                            style={{
-                                fontSize: "1rem",
-                            }}
-                        >
-                            {COUNTRY_DATA[country].long_lat}
-                        </p>
-                    </div>
-                    <a
-                        href="/monthly"
-                        style={{
-                            fontWeight: 600,
-                            textTransform: "uppercase",
-                            textAlign: "right",
-                        }}
-                    >
-                        Annual
-                        <span
-                            style={{
-                                display: "block",
-                                color: "#6b7280",
-                                fontSize: "1rem",
-                            }}
-                        >
-                            Click to view monthly data
-                        </span>
-                    </a>
-                </div>
-            </Topbar>
+            <Topbar country={country} mode="annual" />
             <Main>
                 <Box
                     direction="row"
@@ -390,59 +345,6 @@ const Annual = () => {
                 </Box>
             </Main>
         </>
-    );
-};
-
-interface TopbarProps {
-    children: React.ReactNode;
-}
-
-const Topbar = ({ children }: TopbarProps) => {
-    return (
-        <header
-            style={{
-                display: "flex",
-                justifyContent: "center",
-            }}
-        >
-            <div
-                style={{
-                    width: "100%",
-                    maxWidth: 1400,
-                    padding: "1rem 2rem",
-                    fontSize: "2rem",
-                }}
-            >
-                {children}
-            </div>
-        </header>
-    );
-};
-
-interface MainProps {
-    children: React.ReactNode;
-}
-
-const Main = ({ children }: MainProps) => {
-    return (
-        <main
-            style={{
-                display: "flex",
-                justifyContent: "center",
-            }}
-        >
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100%",
-                    maxWidth: 1400,
-                    padding: "2rem",
-                }}
-            >
-                {children}
-            </div>
-        </main>
     );
 };
 
