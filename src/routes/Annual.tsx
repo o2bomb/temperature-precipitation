@@ -1,11 +1,27 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Legend,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from "recharts";
 import Box from "../components/Box";
 import Button from "../components/Button";
 import LabelledSelect from "../components/Select";
 import { Toggle } from "../components/Toggle";
-import getWeather, { AnnualData } from "../helpers/getWeather";
+import getWeather, { CommonData } from "../helpers/getWeather";
 import { COUNTRY_DATA } from "../pure/country";
 import { CountryEnum, PeriodEnum, ViewEnum } from "../pure/enums";
+
+interface CleanAnnualData extends CommonData {
+    processedData: number;
+}
+
+const GRAPH_HEIGHT = 600;
 
 const Annual = () => {
     // todo read from url params
@@ -13,29 +29,94 @@ const Annual = () => {
     const [country, setCountry] = useState(CountryEnum.Croatia);
     const [period, setPeriod] = useState(PeriodEnum.Option1);
 
-    const [data, setData] = useState<AnnualData>();
+    const [data, setData] = useState<CleanAnnualData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>();
 
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            try {
-                const resp = await getWeather("annualavg", country, view, period);
-                console.log(resp);
-                setData(resp);
-                setError(undefined);
-            } catch (e) {
-                if (typeof e === "string") {
-                    setError(e);
-                } else if (e instanceof Error) {
-                    setError(e.message);
-                }
-            } finally {
-                setLoading(false);
+    const getData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const resp = await getWeather("annualavg", country, view, period);
+
+            const processed: CleanAnnualData[] = [];
+            resp.forEach((r) => {
+                if (r.annualData.length < 1) return;
+                processed.push({
+                    ...r,
+                    processedData: r.annualData[0],
+                });
+            });
+
+            setData(processed);
+            setError(undefined);
+        } catch (e) {
+            if (typeof e === "string") {
+                setError(e);
+            } else if (e instanceof Error) {
+                setError(e.message);
             }
-        })();
+        } finally {
+            setLoading(false);
+        }
     }, [country, period, view]);
+    useEffect(() => {
+        getData();
+    }, [getData]);
+
+    const content = useMemo(() => {
+        if (error) {
+            return (
+                <Box
+                    style={{
+                        minHeight: GRAPH_HEIGHT,
+                    }}
+                    centerItems
+                >
+                    {/* todo: large error icon here */}
+                    <p>{error}</p>
+                    <Button onClick={getData}>Reload Data</Button>
+                </Box>
+            );
+        }
+
+        if (loading) {
+            return (
+                <Box
+                    style={{
+                        minHeight: GRAPH_HEIGHT,
+                    }}
+                    centerItems
+                >
+                    <p>Loading weather data...</p>
+                </Box>
+            );
+        }
+
+        return (
+            <div
+                style={{
+                    marginLeft: "-1rem",
+                    marginRight: "-1rem",
+                }}
+            >
+                <ResponsiveContainer width="100%" height={GRAPH_HEIGHT}>
+                    <BarChart
+                        data={data}
+                        margin={{
+                            right: 20,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="gcm" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="processedData" fill="#fb923c" />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+        );
+    }, [data, error, getData, loading]);
 
     return (
         <>
@@ -107,55 +188,7 @@ const Annual = () => {
                         onChange={(key) => setView(key as ViewEnum)}
                     />
                 </div>
-                <div
-                    style={{
-                        marginLeft: "-1rem",
-                        marginRight: "-1rem",
-                    }}
-                >
-                    {/* <ResponsiveContainer width="100%" height={600}>
-                        <AreaChart
-                            data={data}
-                            margin={{
-                                right: 20,
-                            }}
-                        >
-                            <defs>
-                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-                                </linearGradient>
-                                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <Legend verticalAlign="top" height={36} />
-                            <Tooltip
-                                labelStyle={{
-                                    color: "#111827",
-                                }}
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="uv"
-                                stroke="#8884d8"
-                                fillOpacity={1}
-                                fill="url(#colorUv)"
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="pv"
-                                stroke="#82ca9d"
-                                fillOpacity={1}
-                                fill="url(#colorPv)"
-                            />
-                        </AreaChart>
-                    </ResponsiveContainer> */}
-                </div>
+                {content}
                 <Box
                     direction="row"
                     spacing="2rem"

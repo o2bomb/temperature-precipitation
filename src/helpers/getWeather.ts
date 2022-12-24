@@ -8,20 +8,20 @@ type VariableType = "tas" | "pr";
 
 type DataType = "annualavg" | "mavg";
 
-interface CommonData {
+export interface CommonData {
     gcm: GCMEnum;
     variable: VariableType;
     fromYear: number;
     toYear: number;
 }
 
-export type AnnualData = CommonData & {
+export type AnnualData = (CommonData & {
     annualData: number[];
-};
+})[];
 
-export type MonthlyData = CommonData & {
+export type MonthlyData = (CommonData & {
     monthVals: number[];
-};
+})[];
 
 // https://stackoverflow.com/a/54166010/15993536
 type ResponseType<T> = T extends "annualavg" ? AnnualData : T extends "mavg" ? MonthlyData : never;
