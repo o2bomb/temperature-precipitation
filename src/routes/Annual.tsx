@@ -6,6 +6,7 @@ import Main from "components/Layout/Main";
 import Topbar from "components/Layout/Topbar";
 import LabelledSelect from "components/Select";
 import { Toggle } from "components/Toggle";
+import { WeatherTooltip } from "components/WeatherTooltip";
 import { CommonData } from "helpers/getWeather";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -208,6 +209,7 @@ const Annual = () => {
                             labelStyle={{
                                 color: "#111827",
                             }}
+                            content={<WeatherTooltip view={view} />}
                             contentStyle={{
                                 color: "#111827",
                             }}
