@@ -1,3 +1,5 @@
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Bar,
@@ -110,6 +112,8 @@ const Annual = () => {
                 },
             ];
 
+            console.log("hasdf");
+            throw new Error("Failed to get weather data.");
             const processed: CleanAnnualData[] = [];
             resp.forEach((r: any) => {
                 if (r.annualData.length < 1) return;
@@ -142,11 +146,19 @@ const Annual = () => {
                     style={{
                         minHeight: GRAPH_HEIGHT,
                     }}
+                    spacing="1rem"
                     centerItems
                 >
-                    {/* todo: large error icon here */}
-                    <p>{error}</p>
-                    <Button onClick={getData}>Reload Data</Button>
+                    <FontAwesomeIcon icon={faExclamationCircle} size="6x" color="#9ca3af" />
+                    <p style={{ fontSize: "1.6rem", color: "#9ca3af" }}>{error}</p>
+                    <Button
+                        onClick={getData}
+                        style={{
+                            padding: ".5rem 1rem",
+                        }}
+                    >
+                        Retry
+                    </Button>
                 </Box>
             );
         }

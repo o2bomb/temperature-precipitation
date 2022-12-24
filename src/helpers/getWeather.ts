@@ -38,7 +38,7 @@ export default async function getWeather<T extends DataType>(
         `${API_ENDPOINT}/country/${type}/${variable}/${periodObj.start}/${periodObj.end}/${COUNTRY_DATA[country].iso_code}`,
     );
 
-    if (!raw.ok || raw.status !== 200) throw new Error("Failed to get weather data");
+    if (!raw.ok || raw.status !== 200) throw new Error("Failed to get weather data.");
 
     const resp = await raw.json();
     return resp as ResponseType<T>;
