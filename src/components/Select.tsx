@@ -17,6 +17,7 @@ const LabelledSelect = ({ id, label, ...props }: LabelledSelectProps) => {
                 htmlFor={id}
                 style={{
                     display: "inline-block",
+                    color: "#9ca3af",
                     marginRight: "1rem",
                 }}
             >

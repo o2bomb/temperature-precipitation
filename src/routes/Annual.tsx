@@ -13,7 +13,7 @@ import Box from "../components/Box";
 import Button from "../components/Button";
 import LabelledSelect from "../components/Select";
 import { Toggle } from "../components/Toggle";
-import getWeather, { CommonData } from "../helpers/getWeather";
+import { CommonData } from "../helpers/getWeather";
 import { COUNTRY_DATA } from "../pure/country";
 import { CountryEnum, PeriodEnum, ViewEnum } from "../pure/enums";
 
@@ -36,10 +36,82 @@ const Annual = () => {
     const getData = useCallback(async () => {
         setLoading(true);
         try {
-            const resp = await getWeather("annualavg", country, view, period);
+            // const resp = await getWeather("annualavg", country, view, period);
+            const resp: any = [
+                {
+                    gcm: "access1-0",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.55],
+                },
+                {
+                    gcm: "bnu-esm",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.29],
+                },
+                {
+                    gcm: "canesm2",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.63],
+                },
+                {
+                    gcm: "csiro-mk3-6-0",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.16],
+                },
+                {
+                    gcm: "gfdl-cm3",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [13.63],
+                },
+                {
+                    gcm: "hadgem2-ao",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.57],
+                },
+                {
+                    gcm: "ipsl-cm5a-mr",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.59],
+                },
+                {
+                    gcm: "miroc5",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [13.18],
+                },
+                {
+                    gcm: "mri-cgcm3",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.1],
+                },
+                {
+                    gcm: "noresm1-m",
+                    variable: "tas",
+                    fromYear: 2020,
+                    toYear: 2039,
+                    annualData: [12.64],
+                },
+            ];
 
             const processed: CleanAnnualData[] = [];
-            resp.forEach((r) => {
+            resp.forEach((r: any) => {
                 if (r.annualData.length < 1) return;
                 processed.push({
                     ...r,
@@ -58,7 +130,7 @@ const Annual = () => {
         } finally {
             setLoading(false);
         }
-    }, [country, period, view]);
+    }, []);
     useEffect(() => {
         getData();
     }, [getData]);
@@ -106,17 +178,48 @@ const Annual = () => {
                             right: 20,
                         }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="gcm" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="processedData" fill="#fb923c" />
+                        <defs>
+                            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                <stop
+                                    offset="30%"
+                                    stopColor={
+                                        view === ViewEnum.Temperature ? "#fb923c" : "#3b82f6"
+                                    }
+                                    stopOpacity={0.9}
+                                />
+                                <stop offset="100%" stopColor="transparent" stopOpacity={0.2} />
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid stroke="#f5f5f522" />
+                        <XAxis dataKey="gcm" stroke="#f9fafb" />
+                        <YAxis stroke="#f9fafb" />
+                        <Tooltip
+                            labelStyle={{
+                                color: "#111827",
+                            }}
+                            contentStyle={{
+                                color: "#111827",
+                            }}
+                        />
+                        <Legend
+                            formatter={(value) => {
+                                if (value === "processedData") {
+                                    switch (view) {
+                                        case ViewEnum.Temperature:
+                                            return "Temperature (℃)";
+                                        case ViewEnum.Precipitation:
+                                            return "Precipitation (mm)";
+                                    }
+                                }
+                                return value;
+                            }}
+                        />
+                        <Bar dataKey="processedData" radius={[4, 4, 0, 0]} fill="url(#colorUv)" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
         );
-    }, [data, error, getData, loading]);
+    }, [data, error, getData, loading, view]);
 
     return (
         <>
@@ -175,6 +278,7 @@ const Annual = () => {
                         style={{
                             display: "inline-block",
                             marginRight: "1rem",
+                            color: "#9ca3af",
                         }}
                     >
                         View:
