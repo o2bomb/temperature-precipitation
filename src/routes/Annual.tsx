@@ -166,7 +166,11 @@ const Annual = () => {
                 </div>
             </Topbar>
             <Main>
-                <div>
+                <div
+                    style={{
+                        marginBottom: "1rem",
+                    }}
+                >
                     <label
                         style={{
                             display: "inline-block",
