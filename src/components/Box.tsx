@@ -7,29 +7,23 @@ interface BoxProps extends HTMLAttributes<HTMLDivElement> {
     centerItems?: boolean;
 }
 
-const Box = styled.div<BoxProps>(
-    ({ direction = "column", spacing, centerItems }) => `
+const Box = styled.div<BoxProps>(({ direction = "column", spacing, centerItems }) => {
+    let result = `
 display: flex;
-flex-direction: ${direction};
-${
-    centerItems
-        ? `
-        align-items: center;
-        justify-content: center;
-    `
-        : undefined
-}
+flex-direction: ${direction};`;
 
-${
-    spacing
-        ? `
-    > *:not(:last-child) {
-        ${direction === "column" ? `margin-bottom: ${spacing};` : `margin-right: ${spacing}`}
+    if (centerItems) {
+        result += `\nalign-items: center;
+justify-content: center;`;
     }
-`
-        : undefined
-}
-`,
-);
+
+    if (spacing) {
+        result += `\n> *:not(:last-child) {
+    ${direction === "column" ? `margin-bottom: ${spacing};` : `margin-right: ${spacing};`}
+}`;
+    }
+
+    return result;
+});
 
 export default Box;
