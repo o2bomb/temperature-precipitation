@@ -98,6 +98,11 @@ const Monthly = () => {
             onCountryChange={(v) => setCountry(v)}
             period={period}
             onPeriodChange={(v) => setPeriod(v)}
+            modal={{
+                render: (handleClose) => {
+                    return <Box>testing testing 123</Box>;
+                },
+            }}
         >
             {content}
         </Layout>

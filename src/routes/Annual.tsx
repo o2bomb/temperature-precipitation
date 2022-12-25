@@ -23,6 +23,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import styled from "styled-components";
 
 const GRAPH_HEIGHT = 600;
 
@@ -164,6 +165,15 @@ const Annual = () => {
             onCountryChange={(v) => setCountry(v)}
             period={period}
             onPeriodChange={(v) => setPeriod(v)}
+            modal={{
+                render: () => {
+                    return (
+                        <ModalContent>
+                            <h2>Submit new data point</h2>
+                        </ModalContent>
+                    );
+                },
+            }}
         >
             {content}
         </Layout>
@@ -171,6 +181,12 @@ const Annual = () => {
 };
 
 export default Annual;
+
+const ModalContent = styled(Box)`
+    h2 {
+        font-size: 1.6rem;
+    }
+`;
 
 const DUMMY_DATA = [
     {

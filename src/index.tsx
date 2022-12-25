@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import Modal from "react-modal";
 import App from "./App";
 import "./global.css";
 import reportWebVitals from "./reportWebVitals";
 import "./reset.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+Modal.setAppElement("#root");
 root.render(
     <React.StrictMode>
         <App />

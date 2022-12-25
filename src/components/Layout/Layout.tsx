@@ -1,9 +1,12 @@
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "components/Box";
 import Button from "components/Button";
 import LabelledSelect from "components/Select";
 import { Toggle } from "components/Toggle";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
-import React from "react";
+import React, { useState } from "react";
+import ReactModal from "react-modal";
 import styled from "styled-components";
 import Main from "./Main";
 import Topbar from "./Topbar";
@@ -18,6 +21,10 @@ export interface LayoutProps {
     onCountryChange: (country: CountryEnum) => void;
     period: PeriodEnum;
     onPeriodChange: (period: PeriodEnum) => void;
+    modal: {
+        render: (handleClose: () => void) => React.ReactNode;
+        width?: string;
+    };
     children: React.ReactNode;
 }
 
@@ -29,8 +36,11 @@ const Layout = ({
     onCountryChange,
     period,
     onPeriodChange,
+    modal,
     children,
 }: LayoutProps) => {
+    const [showEntryModal, setShowEntryModal] = useState(false);
+
     return (
         <>
             <Topbar country={country} mode={mode} />
@@ -128,6 +138,7 @@ const Layout = ({
                         </LabelledSelect>
                     </ResponsiveBox>
                     <ResponsiveButton
+                        onClick={() => setShowEntryModal(true)}
                         style={{
                             marginLeft: "auto",
                         }}
@@ -136,11 +147,49 @@ const Layout = ({
                     </ResponsiveButton>
                 </ResponsiveBox>
             </Main>
+            <ReactModal
+                shouldCloseOnEsc
+                shouldCloseOnOverlayClick
+                isOpen={showEntryModal}
+                onRequestClose={() => setShowEntryModal(false)}
+                style={{
+                    content: {
+                        top: "50%",
+                        left: "50%",
+                        right: "auto",
+                        bottom: "auto",
+                        width: "100%",
+                        maxWidth: modal.width || 600,
+                        padding: "2rem",
+                        marginRight: "-50%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "#111827",
+                        border: "none",
+                    },
+                    overlay: {
+                        zIndex: 9999,
+                        backgroundColor: "rgba(0, 0, 0, .6)",
+                    },
+                }}
+            >
+                <CloseButton onClick={() => setShowEntryModal(false)}>
+                    <FontAwesomeIcon icon={faClose} size="2x" />
+                </CloseButton>
+                {modal.render(() => {
+                    setShowEntryModal(false);
+                })}
+            </ReactModal>
         </>
     );
 };
 
 export default Layout;
+
+const CloseButton = styled.button`
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+`;
 
 interface ResponsiveBoxProps {
     breakpoint: string;
