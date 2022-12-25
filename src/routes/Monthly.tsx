@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
-import { MonthlyData } from "helpers/getWeather";
+import { MonthlyTable } from "components/MonthlyTable";
+import {
+    MonthlyDataCollection,
+    ProcessedMonthlyDataCollection,
+    processMonthly,
+} from "helpers/getWeather";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -14,17 +19,16 @@ const Monthly = () => {
     const [country, setCountry] = useState(CountryEnum.Croatia);
     const [period, setPeriod] = useState(PeriodEnum.Option1);
 
-    const [data, setData] = useState<MonthlyData>([]);
+    const [data, setData] = useState<ProcessedMonthlyDataCollection>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>();
 
     const getData = useCallback(async () => {
         setLoading(true);
         try {
-            // const resp = await getWeather("mavg", country, view, period);
+            // const resp = await getWeather("annualavg", country, view, period);
 
-            // console.log(resp);
-            setData(DUMMY_DATA);
+            setData(processMonthly(DUMMY_DATA));
             setError(undefined);
         } catch (e) {
             if (typeof e === "string") {
@@ -77,8 +81,8 @@ const Monthly = () => {
             );
         }
 
-        return <>{/* table here */}</>;
-    }, [error, getData, loading]);
+        return <MonthlyTable data={data} />;
+    }, [data, error, getData, loading]);
 
     return (
         <Layout
@@ -168,4 +172,4 @@ const DUMMY_DATA = [
         toYear: 2039,
         monthVals: [5.46, 5.92, 7.74, 10.88, 15.14, 19.69, 22.29, 22.06, 17.37, 11.08, 8.02, 6.05],
     },
-] as MonthlyData;
+] as MonthlyDataCollection;

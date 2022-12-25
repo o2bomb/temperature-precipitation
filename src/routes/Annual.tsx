@@ -4,7 +4,11 @@ import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
 import { WeatherTooltip } from "components/WeatherTooltip";
-import { AnnualData, CommonData } from "helpers/getWeather";
+import {
+    AnnualDataCollection,
+    processAnnual,
+    ProcessedAnnualDataCollection,
+} from "helpers/getWeather";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -18,10 +22,6 @@ import {
     YAxis,
 } from "recharts";
 
-interface CleanAnnualData extends CommonData {
-    processedData: number;
-}
-
 const GRAPH_HEIGHT = 600;
 
 const Annual = () => {
@@ -30,7 +30,7 @@ const Annual = () => {
     const [country, setCountry] = useState(CountryEnum.Croatia);
     const [period, setPeriod] = useState(PeriodEnum.Option1);
 
-    const [data, setData] = useState<CleanAnnualData[]>([]);
+    const [data, setData] = useState<ProcessedAnnualDataCollection>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>();
 
@@ -39,16 +39,7 @@ const Annual = () => {
         try {
             // const resp = await getWeather("annualavg", country, view, period);
 
-            const processed: CleanAnnualData[] = [];
-            DUMMY_DATA.forEach((r: any) => {
-                if (r.annualData.length < 1) return;
-                processed.push({
-                    ...r,
-                    processedData: r.annualData[0],
-                });
-            });
-
-            setData(processed);
+            setData(processAnnual(DUMMY_DATA));
             setError(undefined);
         } catch (e) {
             if (typeof e === "string") {
@@ -141,7 +132,7 @@ const Annual = () => {
                         />
                         <Legend
                             formatter={(value) => {
-                                if (value === "processedData") {
+                                if (value === "value") {
                                     switch (view) {
                                         case ViewEnum.Temperature:
                                             return "Temperature (℃)";
@@ -152,7 +143,7 @@ const Annual = () => {
                                 return value;
                             }}
                         />
-                        <Bar dataKey="processedData" radius={[4, 4, 0, 0]} fill="url(#colorUv)" />
+                        <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="url(#colorUv)" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -247,4 +238,4 @@ const DUMMY_DATA = [
         toYear: 2039,
         annualData: [12.64],
     },
-] as AnnualData;
+] as AnnualDataCollection;
