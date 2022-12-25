@@ -1,5 +1,6 @@
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnnualMutationType, DataForm } from "components/Annual/DataForm";
 import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
@@ -57,6 +58,26 @@ const Annual = () => {
     useEffect(() => {
         getData();
     }, [getData]);
+
+    const mutateData = useCallback((data: AnnualMutationType) => {
+        setData((prev) => {
+            switch (data.type) {
+                case "new": {
+                    const result = prev.map((p) => p);
+                    result.push({
+                        gcm: data.gcmName,
+                        value: data.newValue,
+                    });
+                    return result;
+                }
+                case "modify":
+                    const result = prev.map((p) => p);
+                    const i = result.findIndex((r) => r.gcm === data.selectedGCM);
+                    result[i].value = data.modifiedValue;
+                    return result;
+            }
+        });
+    }, []);
 
     const content = useMemo(() => {
         if (error) {
@@ -166,10 +187,16 @@ const Annual = () => {
             period={period}
             onPeriodChange={(v) => setPeriod(v)}
             modal={{
-                render: () => {
+                render: (handleClose) => {
                     return (
-                        <ModalContent>
+                        <ModalContent spacing="1rem">
                             <h2>Submit new data point</h2>
+                            <DataForm
+                                onSubmit={(data) => {
+                                    mutateData(data);
+                                    handleClose();
+                                }}
+                            />
                         </ModalContent>
                     );
                 },

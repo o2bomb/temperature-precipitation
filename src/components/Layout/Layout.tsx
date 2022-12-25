@@ -2,7 +2,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "components/Box";
 import Button from "components/Button";
-import LabelledSelect from "components/Select";
+import LabelledSelect, { Option } from "components/LabelledSelect";
 import { Toggle } from "components/Toggle";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import React, { useState } from "react";
@@ -95,27 +95,15 @@ const Layout = ({
                             value={country}
                             onChange={(e) => onCountryChange(e.currentTarget.value as CountryEnum)}
                         >
-                            <LabelledSelect.Option value={CountryEnum.Croatia}>
-                                {CountryEnum.Croatia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Slovenia}>
-                                {CountryEnum.Slovenia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Serbia}>
-                                {CountryEnum.Serbia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.BosniaHerzegovina}>
+                            <Option value={CountryEnum.Croatia}>{CountryEnum.Croatia}</Option>
+                            <Option value={CountryEnum.Slovenia}>{CountryEnum.Slovenia}</Option>
+                            <Option value={CountryEnum.Serbia}>{CountryEnum.Serbia}</Option>
+                            <Option value={CountryEnum.BosniaHerzegovina}>
                                 {CountryEnum.BosniaHerzegovina}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Montenegro}>
-                                {CountryEnum.Montenegro}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Macedonia}>
-                                {CountryEnum.Macedonia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Yugoslavia}>
-                                {CountryEnum.Yugoslavia}
-                            </LabelledSelect.Option>
+                            </Option>
+                            <Option value={CountryEnum.Montenegro}>{CountryEnum.Montenegro}</Option>
+                            <Option value={CountryEnum.Macedonia}>{CountryEnum.Macedonia}</Option>
+                            <Option value={CountryEnum.Yugoslavia}>{CountryEnum.Yugoslavia}</Option>
                         </LabelledSelect>
                         <LabelledSelect
                             id="period"
@@ -123,18 +111,10 @@ const Layout = ({
                             value={period}
                             onChange={(e) => onPeriodChange(e.currentTarget.value as PeriodEnum)}
                         >
-                            <LabelledSelect.Option value={PeriodEnum.Option1}>
-                                {PeriodEnum.Option1}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={PeriodEnum.Option2}>
-                                {PeriodEnum.Option2}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={PeriodEnum.Option3}>
-                                {PeriodEnum.Option3}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={PeriodEnum.Option4}>
-                                {PeriodEnum.Option4}
-                            </LabelledSelect.Option>
+                            <Option value={PeriodEnum.Option1}>{PeriodEnum.Option1}</Option>
+                            <Option value={PeriodEnum.Option2}>{PeriodEnum.Option2}</Option>
+                            <Option value={PeriodEnum.Option3}>{PeriodEnum.Option3}</Option>
+                            <Option value={PeriodEnum.Option4}>{PeriodEnum.Option4}</Option>
                         </LabelledSelect>
                     </ResponsiveBox>
                     <ResponsiveButton
@@ -174,6 +154,7 @@ const Layout = ({
             >
                 <CloseButton onClick={() => setShowEntryModal(false)}>
                     <FontAwesomeIcon icon={faClose} size="2x" />
+                    <span className="visually-hidden">Close</span>
                 </CloseButton>
                 {modal.render(() => {
                     setShowEntryModal(false);
