@@ -60,6 +60,10 @@ const Select = styled((props) => (
     -moz-appearance: none;
     appearance: none;
     cursor: pointer;
+
+    :enabled:hover {
+        background-color: #1f2937aa;
+    }
 `;
 
 LabelledSelect.Select = Select;

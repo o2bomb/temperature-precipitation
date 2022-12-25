@@ -9,6 +9,13 @@ const Button = styled.button`
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 1px;
+
+    :enabled:hover {
+        background-color: #2563eb;
+    }
+    :enabled:active {
+        background-color: #1e40af;
+    }
 `;
 
 export default Button;
