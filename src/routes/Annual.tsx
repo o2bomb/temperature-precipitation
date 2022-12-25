@@ -153,7 +153,7 @@ const Annual = () => {
                 </ResponsiveContainer>
             </div>
         );
-    }, [data, error, loading, setCountry, setPeriod, setView, view]);
+    }, [data, error, loading, navigate, view]);
 
     return (
         <Layout

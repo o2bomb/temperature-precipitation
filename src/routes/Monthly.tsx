@@ -87,7 +87,7 @@ const Monthly = () => {
         }
 
         return <MonthlyTable data={data} />;
-    }, [data, error, loading, setCountry, setPeriod, setView]);
+    }, [data, error, loading, navigate]);
 
     return (
         <Layout
