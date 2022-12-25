@@ -24,7 +24,11 @@ const Topbar = ({ country, mode }: TopbarProps) => {
                     fontSize: "2rem",
                 }}
             >
-                <div>
+                <div
+                    style={{
+                        whiteSpace: "nowrap",
+                    }}
+                >
                     <h1
                         style={{
                             fontWeight: 600,
