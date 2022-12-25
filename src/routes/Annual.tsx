@@ -95,11 +95,12 @@ const Annual = () => {
         return (
             <div
                 style={{
+                    overflowX: "auto",
                     marginLeft: "-1rem",
                     marginRight: "-1rem",
                 }}
             >
-                <ResponsiveContainer width="100%" height={GRAPH_HEIGHT}>
+                <ResponsiveContainer width="100%" minWidth={700} height={GRAPH_HEIGHT}>
                     <BarChart
                         data={data}
                         margin={{
