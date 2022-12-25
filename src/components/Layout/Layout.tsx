@@ -8,7 +8,10 @@ import styled from "styled-components";
 import Main from "./Main";
 import Topbar from "./Topbar";
 
+export type ModeType = "annual" | "monthly";
+
 export interface LayoutProps {
+    mode: ModeType;
     view: ViewEnum;
     onViewChange: (view: ViewEnum) => void;
     country: CountryEnum;
@@ -19,6 +22,7 @@ export interface LayoutProps {
 }
 
 const Layout = ({
+    mode,
     view,
     onViewChange,
     country,
@@ -29,7 +33,7 @@ const Layout = ({
 }: LayoutProps) => {
     return (
         <>
-            <Topbar country={country} mode="annual" />
+            <Topbar country={country} mode={mode} />
             <Main>
                 <ResponsiveBox
                     direction="row"

@@ -4,7 +4,7 @@ import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
 import { WeatherTooltip } from "components/WeatherTooltip";
-import { CommonData } from "helpers/getWeather";
+import { AnnualData, CommonData } from "helpers/getWeather";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -38,81 +38,9 @@ const Annual = () => {
         setLoading(true);
         try {
             // const resp = await getWeather("annualavg", country, view, period);
-            const resp: any = [
-                {
-                    gcm: "access1-0",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.55],
-                },
-                {
-                    gcm: "bnu-esm",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.29],
-                },
-                {
-                    gcm: "canesm2",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.63],
-                },
-                {
-                    gcm: "csiro-mk3-6-0",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.16],
-                },
-                {
-                    gcm: "gfdl-cm3",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [13.63],
-                },
-                {
-                    gcm: "hadgem2-ao",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.57],
-                },
-                {
-                    gcm: "ipsl-cm5a-mr",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.59],
-                },
-                {
-                    gcm: "miroc5",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [13.18],
-                },
-                {
-                    gcm: "mri-cgcm3",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.1],
-                },
-                {
-                    gcm: "noresm1-m",
-                    variable: "tas",
-                    fromYear: 2020,
-                    toYear: 2039,
-                    annualData: [12.64],
-                },
-            ];
 
             const processed: CleanAnnualData[] = [];
-            resp.forEach((r: any) => {
+            DUMMY_DATA.forEach((r: any) => {
                 if (r.annualData.length < 1) return;
                 processed.push({
                     ...r,
@@ -233,6 +161,7 @@ const Annual = () => {
 
     return (
         <Layout
+            mode="annual"
             view={view}
             onViewChange={(v) => setView(v)}
             country={country}
@@ -246,3 +175,76 @@ const Annual = () => {
 };
 
 export default Annual;
+
+const DUMMY_DATA = [
+    {
+        gcm: "access1-0",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.55],
+    },
+    {
+        gcm: "bnu-esm",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.29],
+    },
+    {
+        gcm: "canesm2",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.63],
+    },
+    {
+        gcm: "csiro-mk3-6-0",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.16],
+    },
+    {
+        gcm: "gfdl-cm3",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [13.63],
+    },
+    {
+        gcm: "hadgem2-ao",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.57],
+    },
+    {
+        gcm: "ipsl-cm5a-mr",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.59],
+    },
+    {
+        gcm: "miroc5",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [13.18],
+    },
+    {
+        gcm: "mri-cgcm3",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.1],
+    },
+    {
+        gcm: "noresm1-m",
+        variable: "tas",
+        fromYear: 2020,
+        toYear: 2039,
+        annualData: [12.64],
+    },
+] as AnnualData;
