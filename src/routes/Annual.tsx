@@ -1,6 +1,6 @@
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AnnualMutationType, DataForm } from "components/Annual/DataForm";
+import { AnnualMutationForm, AnnualMutationType } from "components/Annual/AnnualMutationForm";
 import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
@@ -11,7 +11,7 @@ import getWeather, {
     ProcessedAnnualDataCollection,
 } from "helpers/getWeather";
 import useQueryState from "hooks/useQueryState";
-import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
+import { CountryEnum, GCMEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -65,7 +65,7 @@ const Annual = () => {
                 case "new": {
                     const result = prev.map((p) => p);
                     result.push({
-                        gcm: data.gcmName,
+                        gcm: data.gcmName as GCMEnum,
                         value: data.newValue,
                     });
                     return result;
@@ -191,7 +191,8 @@ const Annual = () => {
                     return (
                         <ModalContent spacing="1rem">
                             <h2>Submit new data point</h2>
-                            <DataForm
+                            <AnnualMutationForm
+                                data={data}
                                 onSubmit={(data) => {
                                     mutateData(data);
                                     handleClose();

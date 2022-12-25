@@ -2,18 +2,20 @@ import Box from "components/Box";
 import Button from "components/Button";
 import LabelledInput from "components/LabelledInput";
 import LabelledSelect, { Option } from "components/LabelledSelect";
+import { ProcessedAnnualDataCollection } from "helpers/getWeather";
 import { GCMEnum } from "pure/enums";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 
-export interface DataFormProps {
+export interface AnnualMutationFormProps {
+    data: ProcessedAnnualDataCollection;
     onSubmit: (data: AnnualMutationType) => void;
 }
 
 export type AnnualMutationType =
     | {
           type: "new";
-          gcmName: GCMEnum;
+          gcmName: string;
           newValue: number;
 
           selectedGCM?: never;
@@ -28,7 +30,7 @@ export type AnnualMutationType =
           newValue?: never;
       };
 
-export const DataForm = ({ onSubmit }: DataFormProps) => {
+export const AnnualMutationForm = ({ data, onSubmit }: AnnualMutationFormProps) => {
     const { register, handleSubmit, watch } = useForm<AnnualMutationType>({
         defaultValues: {
             type: "new",
@@ -73,16 +75,11 @@ export const DataForm = ({ onSubmit }: DataFormProps) => {
                                 required: true,
                             })}
                         >
-                            <Option value={GCMEnum.Access1}>{GCMEnum.Access1}</Option>
-                            <Option value={GCMEnum.Bnu}>{GCMEnum.Bnu}</Option>
-                            <Option value={GCMEnum.Canesm2}>{GCMEnum.Canesm2}</Option>
-                            <Option value={GCMEnum.Csiro}>{GCMEnum.Csiro}</Option>
-                            <Option value={GCMEnum.Gfdl}>{GCMEnum.Gfdl}</Option>
-                            <Option value={GCMEnum.Hadgem2}>{GCMEnum.Hadgem2}</Option>
-                            <Option value={GCMEnum.Ipsl}>{GCMEnum.Ipsl}</Option>
-                            <Option value={GCMEnum.Miroc5}>{GCMEnum.Miroc5}</Option>
-                            <Option value={GCMEnum.Mri}>{GCMEnum.Mri}</Option>
-                            <Option value={GCMEnum.Noresm1}>{GCMEnum.Noresm1}</Option>
+                            {data.map((d, index) => (
+                                <Option key={index} value={d.gcm}>
+                                    {d.gcm}
+                                </Option>
+                            ))}
                         </LabelledSelect>
                         <LabelledInput
                             key="modifiedValue"
@@ -97,7 +94,7 @@ export const DataForm = ({ onSubmit }: DataFormProps) => {
                     </>
                 );
         }
-    }, [register, type]);
+    }, [data, register, type]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
