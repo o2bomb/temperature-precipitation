@@ -14,6 +14,10 @@ export interface MonthlyTableProps {
 const columnHelper = createColumnHelper<ProcessedMonthlyData>();
 
 const columns = [
+    columnHelper.accessor("gcm", {
+        header: "",
+        cell: (info) => info.getValue(),
+    }),
     columnHelper.accessor("jan", {
         header: "January",
         cell: (info) => info.getValue(),
@@ -93,11 +97,14 @@ export const MonthlyTable = ({ data }: MonthlyTableProps) => {
                 <tbody>
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <td key={cell.id}>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </td>
-                            ))}
+                            {row.getVisibleCells().map((cell) => {
+                                console.log(cell);
+                                return (
+                                    <TableData key={cell.id} isGCM={cell.column.id === "gcm"}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableData>
+                                );
+                            })}
                         </tr>
                     ))}
                 </tbody>
@@ -112,18 +119,46 @@ const Scrollable = styled.div`
 `;
 
 const Table = styled.table`
-    th {
-        text-align: left;
-    }
-
     th,
     td {
+        text-align: right;
+        white-space: nowrap;
         padding: 0.5rem 2rem;
         :first-child {
-            padding-left: 0;
+            padding-left: 0.5rem;
         }
         :last-child {
-            padding-right: 0;
+            padding-right: 0.5rem;
         }
     }
+
+    thead th:not(:first-child) {
+        border-bottom: 1px solid #1f2937;
+    }
+
+    thead th {
+        padding-bottom: 0.8rem;
+    }
+
+    tbody tr {
+        :nth-child(even) {
+            background-color: #1f2937aa;
+        }
+    }
+`;
+
+interface TableDataProps {
+    isGCM?: boolean;
+}
+
+const TableData = styled.td<TableDataProps>`
+    ${(props) =>
+        props.isGCM
+            ? `
+        border-right: 1px solid #1f2937;
+        text-align: right;
+        font-weight: 500;
+        padding-right: 1rem !important;
+    `
+            : undefined}
 `;
