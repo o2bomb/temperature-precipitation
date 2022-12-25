@@ -16,11 +16,7 @@ const Topbar = ({ country, mode }: TopbarProps) => {
             }}
         >
             <ResponsiveWrap>
-                <div
-                    style={{
-                        whiteSpace: "nowrap",
-                    }}
-                >
+                <div>
                     <h1
                         style={{
                             fontWeight: 600,
