@@ -2,10 +2,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "components/Box";
 import Button from "components/Button";
-import Main from "components/Layout/Main";
-import Topbar from "components/Layout/Topbar";
-import LabelledSelect from "components/Select";
-import { Toggle } from "components/Toggle";
+import Layout from "components/Layout/Layout";
 import { WeatherTooltip } from "components/WeatherTooltip";
 import { CommonData } from "helpers/getWeather";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
@@ -20,7 +17,6 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
-import styled from "styled-components";
 
 interface CleanAnnualData extends CommonData {
     processedData: number;
@@ -236,141 +232,17 @@ const Annual = () => {
     }, [data, error, getData, loading, view]);
 
     return (
-        <>
-            <Topbar country={country} mode="annual" />
-            <Main>
-                <ResponsiveBox
-                    direction="row"
-                    spacing="2rem"
-                    breakpoint="750px"
-                    reverse
-                    style={{
-                        alignItems: "baseline",
-                        marginBottom: "1rem",
-                    }}
-                >
-                    <p
-                        style={{
-                            fontSize: "1.6rem",
-                        }}
-                    >
-                        Years {period}
-                    </p>
-                    <ResponsiveToggle
-                        options={[
-                            {
-                                value: ViewEnum.Temperature,
-                            },
-                            {
-                                value: ViewEnum.Precipitation,
-                            },
-                        ]}
-                        value={view}
-                        onChange={(key) => setView(key as ViewEnum)}
-                        style={{
-                            marginLeft: "auto",
-                        }}
-                    />
-                </ResponsiveBox>
-                {content}
-                <ResponsiveBox
-                    direction="row"
-                    spacing="2rem"
-                    breakpoint="750px"
-                    style={{
-                        alignItems: "baseline",
-                        marginTop: "1rem",
-                    }}
-                >
-                    <ResponsiveBox direction="row" spacing="1rem" breakpoint="950px">
-                        <LabelledSelect
-                            id="country"
-                            label="Country"
-                            value={country}
-                            onChange={(e) => setCountry(e.currentTarget.value as CountryEnum)}
-                        >
-                            <LabelledSelect.Option value={CountryEnum.Croatia}>
-                                {CountryEnum.Croatia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Slovenia}>
-                                {CountryEnum.Slovenia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Serbia}>
-                                {CountryEnum.Serbia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.BosniaHerzegovina}>
-                                {CountryEnum.BosniaHerzegovina}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Montenegro}>
-                                {CountryEnum.Montenegro}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Macedonia}>
-                                {CountryEnum.Macedonia}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={CountryEnum.Yugoslavia}>
-                                {CountryEnum.Yugoslavia}
-                            </LabelledSelect.Option>
-                        </LabelledSelect>
-                        <LabelledSelect
-                            id="period"
-                            label="Period"
-                            value={period}
-                            onChange={(e) => setPeriod(e.currentTarget.value as PeriodEnum)}
-                        >
-                            <LabelledSelect.Option value={PeriodEnum.Option1}>
-                                {PeriodEnum.Option1}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={PeriodEnum.Option2}>
-                                {PeriodEnum.Option2}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={PeriodEnum.Option3}>
-                                {PeriodEnum.Option3}
-                            </LabelledSelect.Option>
-                            <LabelledSelect.Option value={PeriodEnum.Option4}>
-                                {PeriodEnum.Option4}
-                            </LabelledSelect.Option>
-                        </LabelledSelect>
-                    </ResponsiveBox>
-                    <ResponsiveButton
-                        style={{
-                            marginLeft: "auto",
-                        }}
-                    >
-                        Enter new datapoint
-                    </ResponsiveButton>
-                </ResponsiveBox>
-            </Main>
-        </>
+        <Layout
+            view={view}
+            onViewChange={(v) => setView(v)}
+            country={country}
+            onCountryChange={(v) => setCountry(v)}
+            period={period}
+            onPeriodChange={(v) => setPeriod(v)}
+        >
+            {content}
+        </Layout>
     );
 };
 
 export default Annual;
-
-interface ResponsiveBoxProps {
-    breakpoint: string;
-    reverse?: boolean;
-}
-
-const ResponsiveBox = styled(Box)<ResponsiveBoxProps>`
-    @media (max-width: ${(props) => props.breakpoint}) {
-        flex-direction: ${(props) => (props.reverse ? "column-reverse" : "column")};
-
-        > *:not(:last-child) {
-            ${(props) => (props.reverse ? "margin-top: 1rem;" : "margin-bottom: 1rem;")}
-        }
-    }
-`;
-
-const ResponsiveButton = styled(Button)`
-    @media (max-width: 750px) {
-        width: 100%;
-        margin-left: 0;
-    }
-`;
-
-const ResponsiveToggle = styled(Toggle)`
-    @media (max-width: 750px) {
-        width: 100%;
-        margin-left: 0;
-    }
-`;
