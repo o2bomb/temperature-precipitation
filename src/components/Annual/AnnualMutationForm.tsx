@@ -57,6 +57,7 @@ export const AnnualMutationForm = ({ data, onSubmit }: AnnualMutationFormProps) 
                             id="newValue"
                             label="Value"
                             type="number"
+                            step="any"
                             required
                             {...register("newValue", {
                                 required: true,
@@ -86,6 +87,7 @@ export const AnnualMutationForm = ({ data, onSubmit }: AnnualMutationFormProps) 
                             id="modifiedValue"
                             label="Value"
                             type="number"
+                            step="any"
                             required
                             {...register("modifiedValue", {
                                 required: true,

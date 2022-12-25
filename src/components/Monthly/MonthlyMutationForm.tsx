@@ -104,6 +104,7 @@ export const MonthlyMutationForm = ({ data, onSubmit }: MonthlyMutationFormProps
                             id="modifiedValue"
                             label="Value"
                             type="number"
+                            step="any"
                             required
                             {...register("modifiedValue", {
                                 required: true,
