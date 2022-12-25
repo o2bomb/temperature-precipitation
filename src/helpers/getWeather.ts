@@ -42,8 +42,12 @@ export default async function getWeather<T extends DataType>(
 ) {
     const periodObj = getPeriod(period);
     const variable = getVariable(view);
+    const countryData = COUNTRY_DATA[country];
+
+    if (!countryData) throw new Error("Failed to get weather data.");
+
     const raw = await fetch(
-        `${API_ENDPOINT}/country/${type}/${variable}/${periodObj.start}/${periodObj.end}/${COUNTRY_DATA[country].iso_code}`,
+        `${API_ENDPOINT}/country/${type}/${variable}/${periodObj.start}/${periodObj.end}/${countryData.iso_code}`,
     );
 
     if (!raw.ok || raw.status !== 200) throw new Error("Failed to get weather data.");

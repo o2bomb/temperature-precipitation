@@ -12,6 +12,7 @@ import getWeather, {
 import useQueryState from "hooks/useQueryState";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Bar,
     BarChart,
@@ -26,6 +27,7 @@ import {
 const GRAPH_HEIGHT = 600;
 
 const Annual = () => {
+    const navigate = useNavigate();
     const [view, setView] = useQueryState<ViewEnum>("view", ViewEnum.Temperature);
     const [country, setCountry] = useQueryState<CountryEnum>("country", CountryEnum.Croatia);
     const [period, setPeriod] = useQueryState<PeriodEnum>("period", PeriodEnum.Option1);
@@ -37,10 +39,10 @@ const Annual = () => {
     const getData = useCallback(async () => {
         setLoading(true);
         try {
+            setError(undefined);
             const resp = await getWeather("annualavg", country, view, period);
 
             setData(processAnnual(resp));
-            setError(undefined);
         } catch (e) {
             if (typeof e === "string") {
                 setError(e);
@@ -68,7 +70,9 @@ const Annual = () => {
                     <FontAwesomeIcon icon={faExclamationCircle} size="6x" color="#9ca3af" />
                     <p style={{ fontSize: "1.6rem", color: "#9ca3af" }}>{error}</p>
                     <Button
-                        onClick={getData}
+                        onClick={() => {
+                            navigate("/annual");
+                        }}
                         style={{
                             padding: ".5rem 1rem",
                         }}
@@ -149,7 +153,7 @@ const Annual = () => {
                 </ResponsiveContainer>
             </div>
         );
-    }, [data, error, getData, loading, view]);
+    }, [data, error, loading, setCountry, setPeriod, setView, view]);
 
     return (
         <Layout

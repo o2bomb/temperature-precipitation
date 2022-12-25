@@ -12,10 +12,12 @@ import getWeather, {
 import useQueryState from "hooks/useQueryState";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const TABLE_HEIGHT = 600;
 
 const Monthly = () => {
+    const navigate = useNavigate();
     const [view, setView] = useQueryState<ViewEnum>("view", ViewEnum.Temperature);
     const [country, setCountry] = useQueryState<CountryEnum>("country", CountryEnum.Croatia);
     const [period, setPeriod] = useQueryState<PeriodEnum>("period", PeriodEnum.Option1);
@@ -27,10 +29,10 @@ const Monthly = () => {
     const getData = useCallback(async () => {
         setLoading(true);
         try {
+            setError(undefined);
             const resp = await getWeather("mavg", country, view, period);
 
             setData(processMonthly(resp));
-            setError(undefined);
         } catch (e) {
             if (typeof e === "string") {
                 setError(e);
@@ -58,7 +60,9 @@ const Monthly = () => {
                     <FontAwesomeIcon icon={faExclamationCircle} size="6x" color="#9ca3af" />
                     <p style={{ fontSize: "1.6rem", color: "#9ca3af" }}>{error}</p>
                     <Button
-                        onClick={getData}
+                        onClick={() => {
+                            navigate("/monthly");
+                        }}
                         style={{
                             padding: ".5rem 1rem",
                         }}
@@ -83,7 +87,7 @@ const Monthly = () => {
         }
 
         return <MonthlyTable data={data} />;
-    }, [data, error, getData, loading]);
+    }, [data, error, loading, setCountry, setPeriod, setView]);
 
     return (
         <Layout
