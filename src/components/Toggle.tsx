@@ -1,4 +1,5 @@
 import React, { HTMLAttributes } from "react";
+import styled from "styled-components";
 
 export interface ToggleProps extends Omit<HTMLAttributes<HTMLMenuElement>, "onChange"> {
     options: {
@@ -30,19 +31,26 @@ export const Toggle = ({ options, value, onChange, fullWidth, style, ...props }:
                         flex: 1,
                     }}
                 >
-                    <button
+                    <ToggleButton
                         onClick={(e) => onChange && onChange(o.value, e)}
                         style={{
-                            width: "100%",
-                            padding: ".5rem 1rem",
-                            borderRadius: ".5rem",
                             backgroundColor: value === o.value ? "#1f2937" : undefined,
                         }}
                     >
                         {o.label || o.value}
-                    </button>
+                    </ToggleButton>
                 </li>
             ))}
         </menu>
     );
 };
+
+const ToggleButton = styled.button`
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+
+    :enabled:hover {
+        background-color: #1f2937aa;
+    }
+`;
