@@ -25,12 +25,7 @@ export const Toggle = ({ options, value, onChange, fullWidth, style, ...props }:
             {...props}
         >
             {options.map((o, index) => (
-                <li
-                    key={index}
-                    style={{
-                        flex: 1,
-                    }}
-                >
+                <ToggleWrap key={index}>
                     <ToggleButton
                         onClick={(e) => onChange && onChange(o.value, e)}
                         style={{
@@ -39,11 +34,18 @@ export const Toggle = ({ options, value, onChange, fullWidth, style, ...props }:
                     >
                         {o.label || o.value}
                     </ToggleButton>
-                </li>
+                </ToggleWrap>
             ))}
         </menu>
     );
 };
+
+const ToggleWrap = styled.li`
+    flex: 1;
+    :not(:last-child) {
+        margin-right: 0.3rem;
+    }
+`;
 
 const ToggleButton = styled.button`
     width: 100%;

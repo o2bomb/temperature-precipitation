@@ -1,5 +1,6 @@
 import { COUNTRY_DATA } from "pure/country";
 import { CountryEnum } from "pure/enums";
+import styled from "styled-components";
 
 interface TopbarProps {
     country: CountryEnum;
@@ -14,16 +15,7 @@ const Topbar = ({ country, mode }: TopbarProps) => {
                 justifyContent: "center",
             }}
         >
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    maxWidth: 1400,
-                    padding: "1rem 2rem",
-                    fontSize: "2rem",
-                }}
-            >
+            <ResponsiveWrap>
                 <div
                     style={{
                         whiteSpace: "nowrap",
@@ -45,14 +37,7 @@ const Topbar = ({ country, mode }: TopbarProps) => {
                         {COUNTRY_DATA[country].long_lat}
                     </p>
                 </div>
-                <a
-                    href={`/${mode === "annual" ? "monthly" : "annual"}`}
-                    style={{
-                        fontWeight: 600,
-                        textTransform: "uppercase",
-                        textAlign: "right",
-                    }}
-                >
+                <Switch href={`/${mode === "annual" ? "monthly" : "annual"}`}>
                     {mode === "annual" ? "Annual" : "Monthly"}
                     <span
                         style={{
@@ -63,10 +48,34 @@ const Topbar = ({ country, mode }: TopbarProps) => {
                     >
                         Click to view {mode === "annual" ? "monthly" : "annual"} data
                     </span>
-                </a>
-            </div>
+                </Switch>
+            </ResponsiveWrap>
         </header>
     );
 };
 
 export default Topbar;
+
+const Switch = styled.a`
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: right;
+`;
+
+const ResponsiveWrap = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1400px;
+    padding: 1rem 2rem;
+    font-size: 2rem;
+
+    @media (max-width: 750px) {
+        flex-direction: column-reverse;
+
+        ${Switch} {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+    }
+`;
