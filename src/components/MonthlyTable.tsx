@@ -97,14 +97,11 @@ export const MonthlyTable = ({ data }: MonthlyTableProps) => {
                 <tbody>
                     {table.getRowModel().rows.map((row) => (
                         <tr key={row.id}>
-                            {row.getVisibleCells().map((cell) => {
-                                console.log(cell);
-                                return (
-                                    <TableData key={cell.id} isGCM={cell.column.id === "gcm"}>
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </TableData>
-                                );
-                            })}
+                            {row.getVisibleCells().map((cell) => (
+                                <TableData key={cell.id} isGCM={cell.column.id === "gcm"}>
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                </TableData>
+                            ))}
                         </tr>
                     ))}
                 </tbody>
