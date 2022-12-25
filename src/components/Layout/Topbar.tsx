@@ -8,6 +8,7 @@ interface TopbarProps {
 }
 
 const Topbar = ({ country, mode }: TopbarProps) => {
+    const countryData = COUNTRY_DATA[country];
     return (
         <header
             style={{
@@ -16,23 +17,25 @@ const Topbar = ({ country, mode }: TopbarProps) => {
             }}
         >
             <ResponsiveWrap>
-                <div>
-                    <h1
-                        style={{
-                            fontWeight: 600,
-                            letterSpacing: 1,
-                        }}
-                    >
-                        {COUNTRY_DATA[country].flag} {COUNTRY_DATA[country].label}
-                    </h1>
-                    <p
-                        style={{
-                            fontSize: "1rem",
-                        }}
-                    >
-                        {COUNTRY_DATA[country].long_lat}
-                    </p>
-                </div>
+                {countryData && (
+                    <div>
+                        <h1
+                            style={{
+                                fontWeight: 600,
+                                letterSpacing: 1,
+                            }}
+                        >
+                            {countryData.flag} {countryData.label}
+                        </h1>
+                        <p
+                            style={{
+                                fontSize: "1rem",
+                            }}
+                        >
+                            {countryData.long_lat}
+                        </p>
+                    </div>
+                )}
                 <Switch href={`/${mode === "annual" ? "monthly" : "annual"}`}>
                     {mode === "annual" ? "Annual" : "Monthly"}
                     <span
@@ -56,11 +59,11 @@ const Switch = styled.a`
     font-weight: 600;
     text-transform: uppercase;
     text-align: right;
+    margin-left: auto;
 `;
 
 const ResponsiveWrap = styled.div`
     display: flex;
-    justify-content: space-between;
     width: 100%;
     max-width: 1400px;
     padding: 1rem 2rem;
@@ -71,6 +74,7 @@ const ResponsiveWrap = styled.div`
 
         ${Switch} {
             margin-bottom: 1rem;
+            margin-left: 0;
             text-align: left;
         }
     }

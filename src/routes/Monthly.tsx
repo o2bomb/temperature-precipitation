@@ -4,20 +4,21 @@ import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
 import { MonthlyTable } from "components/MonthlyTable";
-import {
+import getWeather, {
     MonthlyDataCollection,
     ProcessedMonthlyDataCollection,
     processMonthly,
 } from "helpers/getWeather";
+import useQueryState from "hooks/useQueryState";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const TABLE_HEIGHT = 600;
 
 const Monthly = () => {
-    const [view, setView] = useState(ViewEnum.Temperature);
-    const [country, setCountry] = useState(CountryEnum.Croatia);
-    const [period, setPeriod] = useState(PeriodEnum.Option1);
+    const [view, setView] = useQueryState<ViewEnum>("view", ViewEnum.Temperature);
+    const [country, setCountry] = useQueryState<CountryEnum>("country", CountryEnum.Croatia);
+    const [period, setPeriod] = useQueryState<PeriodEnum>("period", PeriodEnum.Option1);
 
     const [data, setData] = useState<ProcessedMonthlyDataCollection>([]);
     const [loading, setLoading] = useState(true);
@@ -26,9 +27,9 @@ const Monthly = () => {
     const getData = useCallback(async () => {
         setLoading(true);
         try {
-            // const resp = await getWeather("annualavg", country, view, period);
+            const resp = await getWeather("mavg", country, view, period);
 
-            setData(processMonthly(DUMMY_DATA));
+            setData(processMonthly(resp));
             setError(undefined);
         } catch (e) {
             if (typeof e === "string") {
@@ -39,7 +40,7 @@ const Monthly = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [country, period, view]);
     useEffect(() => {
         getData();
     }, [getData]);
