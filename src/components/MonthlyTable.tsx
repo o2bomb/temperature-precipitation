@@ -115,7 +115,10 @@ export const MonthlyTable = ({ data }: MonthlyTableProps) => {
 
 const Scrollable = styled.div`
     overflow-x: auto;
-    scro
+
+    @media (max-width: 500px) {
+        max-height: 300px;
+    }
 `;
 
 const Table = styled.table`
@@ -132,12 +135,16 @@ const Table = styled.table`
         }
     }
 
-    thead th:not(:first-child) {
-        border-bottom: 1px solid #1f2937;
+    thead th {
+        z-index: 1;
+        position: sticky;
+        top: 0;
+        padding-bottom: 0.8rem;
+        background-color: #101c35;
     }
 
-    thead th {
-        padding-bottom: 0.8rem;
+    thead th:not(:first-child) {
+        border-bottom: 1px solid #1f2937;
     }
 
     tbody tr {
@@ -155,10 +162,14 @@ const TableData = styled.td<TableDataProps>`
     ${(props) =>
         props.isGCM
             ? `
-        border-right: 1px solid #1f2937;
-        text-align: right;
-        font-weight: 500;
-        padding-right: 1rem !important;
+            z-index: 2;
+            position: sticky;
+            left: 0;
+            padding-right: 1rem !important;
+            background-color: #101c35;
+            border-right: 1px solid #1f2937;
+            text-align: right;
+            font-weight: 500;
     `
             : undefined}
 `;

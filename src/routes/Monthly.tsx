@@ -12,7 +12,7 @@ import {
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const TABLE_HEIGHT = 600;
+export const TABLE_HEIGHT = 600;
 
 const Monthly = () => {
     const [view, setView] = useState(ViewEnum.Temperature);
