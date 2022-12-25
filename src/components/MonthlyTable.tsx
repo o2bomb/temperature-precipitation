@@ -141,10 +141,15 @@ const Table = styled.table`
         top: 0;
         padding-bottom: 0.8rem;
         background-color: #101c35;
-    }
+        :not(:first-child) {
+            border-bottom: 1px solid #1f2937;
+        }
 
-    thead th:not(:first-child) {
-        border-bottom: 1px solid #1f2937;
+        :first-child {
+            z-index: 3;
+            top: 0;
+            left: 0;
+        }
     }
 
     tbody tr {
