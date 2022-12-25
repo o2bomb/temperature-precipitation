@@ -3,16 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "components/Box";
 import Button from "components/Button";
 import Layout from "components/Layout/Layout";
-import { MonthlyTable } from "components/MonthlyTable";
+import { MonthlyMutationForm, MonthlyMutationType } from "components/Monthly/MonthlyMutationForm";
+import { MonthlyTable } from "components/Monthly/MonthlyTable";
 import getWeather, {
     MonthlyDataCollection,
+    ProcessedMonthlyData,
     ProcessedMonthlyDataCollection,
     processMonthly,
 } from "helpers/getWeather";
 import useQueryState from "hooks/useQueryState";
-import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
+import { CountryEnum, GCMEnum, PeriodEnum, ViewEnum } from "pure/enums";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 export const TABLE_HEIGHT = 600;
 
@@ -46,6 +49,44 @@ const Monthly = () => {
     useEffect(() => {
         getData();
     }, [getData]);
+
+    const mutateData = useCallback((data: MonthlyMutationType) => {
+        setData((prev) => {
+            switch (data.type) {
+                case "new": {
+                    const result = prev.map((p) => p);
+                    const monthlyValues = new Array(12).fill(0);
+                    const rawValues = data.newValues.split(",");
+                    for (let i = 0; i < rawValues.length; i++) {
+                        monthlyValues[i] = parseFloat(rawValues[i]);
+                    }
+                    result.push({
+                        gcm: data.gcmName as GCMEnum,
+                        jan: monthlyValues[0],
+                        feb: monthlyValues[1],
+                        mar: monthlyValues[2],
+                        apr: monthlyValues[3],
+                        may: monthlyValues[4],
+                        jun: monthlyValues[5],
+                        jul: monthlyValues[6],
+                        aug: monthlyValues[7],
+                        sep: monthlyValues[8],
+                        oct: monthlyValues[9],
+                        nov: monthlyValues[10],
+                        dec: monthlyValues[11],
+                    });
+                    return result;
+                }
+                case "modify":
+                    const result = prev.map((p) => p);
+                    const i = result.findIndex((r) => r.gcm === data.selectedGCM);
+                    (result[i][
+                        data.selectedMonth.slice(0, 3).toLowerCase() as keyof ProcessedMonthlyData
+                    ] as number) = data.modifiedValue;
+                    return result;
+            }
+        });
+    }, []);
 
     const content = useMemo(() => {
         if (error) {
@@ -100,7 +141,18 @@ const Monthly = () => {
             onPeriodChange={(v) => setPeriod(v)}
             modal={{
                 render: (handleClose) => {
-                    return <Box>testing testing 123</Box>;
+                    return (
+                        <ModalContent spacing="1rem">
+                            <h2>Submit new data point</h2>
+                            <MonthlyMutationForm
+                                data={data}
+                                onSubmit={(data) => {
+                                    mutateData(data);
+                                    handleClose();
+                                }}
+                            />
+                        </ModalContent>
+                    );
                 },
             }}
         >
@@ -108,6 +160,12 @@ const Monthly = () => {
         </Layout>
     );
 };
+
+const ModalContent = styled(Box)`
+    h2 {
+        font-size: 1.6rem;
+    }
+`;
 
 export default Monthly;
 

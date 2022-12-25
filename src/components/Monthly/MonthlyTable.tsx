@@ -5,6 +5,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ProcessedMonthlyData, ProcessedMonthlyDataCollection } from "helpers/getWeather";
+import { MonthEnum } from "pure/enums";
 import styled from "styled-components";
 
 export interface MonthlyTableProps {
@@ -19,51 +20,51 @@ const columns = [
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("jan", {
-        header: "January",
+        header: MonthEnum.January,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("feb", {
-        header: "February",
+        header: MonthEnum.February,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("mar", {
-        header: "March",
+        header: MonthEnum.March,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("apr", {
-        header: "April",
+        header: MonthEnum.April,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("may", {
-        header: "May",
+        header: MonthEnum.May,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("jun", {
-        header: "June",
+        header: MonthEnum.June,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("jul", {
-        header: "July",
+        header: MonthEnum.July,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("aug", {
-        header: "August",
+        header: MonthEnum.August,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("sep", {
-        header: "September",
+        header: MonthEnum.September,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("oct", {
-        header: "October",
+        header: MonthEnum.October,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("nov", {
-        header: "November",
+        header: MonthEnum.November,
         cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("dec", {
-        header: "December",
+        header: MonthEnum.December,
         cell: (info) => info.getValue(),
     }),
 ];

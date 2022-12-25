@@ -1,5 +1,6 @@
 import React, { SelectHTMLAttributes } from "react";
 import styled from "styled-components";
+import Box from "./Box";
 
 interface LabelledSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
     id: string;
@@ -9,8 +10,11 @@ interface LabelledSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 const LabelledSelect = React.forwardRef<HTMLSelectElement, LabelledSelectProps>(
     function LabelledSelect({ id, label, ...props }, ref) {
         return (
-            <div
+            <Box
+                direction="row"
+                spacing="1rem"
                 style={{
+                    alignItems: "baseline",
                     whiteSpace: "nowrap",
                 }}
             >
@@ -25,7 +29,7 @@ const LabelledSelect = React.forwardRef<HTMLSelectElement, LabelledSelectProps>(
                     {label}:
                 </label>
                 <Select ref={ref} id={id} {...props} />
-            </div>
+            </Box>
         );
     },
 );
@@ -37,6 +41,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectHTMLAttributes<H
         return (
             <div
                 style={{
+                    flex: 1,
                     position: "relative",
                     display: "inline-block",
                 }}
@@ -62,6 +67,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectHTMLAttributes<H
 
 const InnerSelect = styled.select`
     position: relative;
+    width: 100%;
     padding: 0.5rem 1rem;
     padding-right: 3rem;
     background-color: #1f2937;

@@ -32,3 +32,18 @@ export enum GCMEnum {
     Mri = "mri-cgcm3",
     Noresm1 = "noresm1-m",
 }
+
+export enum MonthEnum {
+    January = "January",
+    February = "February",
+    March = "March",
+    April = "April",
+    May = "May",
+    June = "June",
+    July = "July",
+    August = "August",
+    September = "September",
+    October = "October",
+    November = "November",
+    December = "December",
+}

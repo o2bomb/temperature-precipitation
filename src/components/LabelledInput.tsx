@@ -1,5 +1,6 @@
 import React, { InputHTMLAttributes } from "react";
 import styled from "styled-components";
+import Box from "./Box";
 
 export interface LabelledInputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
@@ -11,8 +12,11 @@ const LabelledInput = React.forwardRef<HTMLInputElement, LabelledInputProps>(fun
     ref,
 ) {
     return (
-        <div
+        <Box
+            direction="row"
+            spacing="1rem"
             style={{
+                alignItems: "baseline",
                 whiteSpace: "nowrap",
             }}
         >
@@ -27,7 +31,7 @@ const LabelledInput = React.forwardRef<HTMLInputElement, LabelledInputProps>(fun
                 {label}:
             </label>
             <Input ref={ref} id={id} {...props} />
-        </div>
+        </Box>
     );
 });
 
@@ -38,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputEl
         return (
             <div
                 style={{
-                    position: "relative",
+                    flex: 1,
                     display: "inline-block",
                 }}
             >
@@ -49,11 +53,16 @@ const Input = React.forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputEl
 );
 
 const InputInner = styled.input`
+    width: 100%;
     padding: 0.5rem 1rem;
     background-color: #1f2937;
     border-radius: 0.5rem;
 
     :enabled:hover {
         background-color: #1f2937aa;
+    }
+
+    ::placeholder {
+        color: #4b5563;
     }
 `;
