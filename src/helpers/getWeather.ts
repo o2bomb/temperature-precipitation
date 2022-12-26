@@ -75,7 +75,7 @@ export default async function getWeather<T extends DataType>(
                         const gcmData = allData[j][i] as AnnualData;
                         entry.annualData[0] += gcmData.annualData[0];
                     }
-                    entry.annualData[0] = entry.annualData[0] / countryList.length;
+                    entry.annualData[0] = +(entry.annualData[0] / countryList.length).toFixed(2);
                     (yugsResp as AnnualDataCollection).push(entry);
                     break;
                 }
@@ -96,7 +96,8 @@ export default async function getWeather<T extends DataType>(
                         }
                     }
                     for (let j = 0; j < entry.monthVals.length; j++) {
-                        entry.monthVals[j] = entry.monthVals[j] / countryList.length;
+                        // See this https://stackoverflow.com/a/12830454/15993536 for toFixed(2) usage
+                        entry.monthVals[j] = +(entry.monthVals[j] / countryList.length).toFixed(2);
                     }
 
                     (yugsResp as MonthlyDataCollection).push(entry);
