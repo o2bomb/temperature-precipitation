@@ -90,7 +90,9 @@ const Annual = () => {
                     centerItems
                 >
                     <FontAwesomeIcon icon={faExclamationCircle} size="6x" color="#9ca3af" />
-                    <p style={{ fontSize: "1.6rem", color: "#9ca3af" }}>{error}</p>
+                    <p style={{ fontSize: "1.6rem", color: "#9ca3af", textAlign: "center" }}>
+                        {error}
+                    </p>
                     <Button
                         onClick={() => {
                             navigate("/annual");
@@ -113,7 +115,14 @@ const Annual = () => {
                     }}
                     centerItems
                 >
-                    <p className="loading-text">Loading weather data</p>
+                    <p
+                        className="loading-text"
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        Loading weather data
+                    </p>
                 </Box>
             );
         }

@@ -206,4 +206,8 @@ const ResponsiveToggle = styled(Toggle)`
         width: 100%;
         margin-left: 0;
     }
+
+    @media (max-width: 450px) {
+        flex-direction: column;
+    }
 `;
