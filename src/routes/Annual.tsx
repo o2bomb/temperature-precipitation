@@ -179,7 +179,7 @@ const Annual = () => {
 
     return (
         <Layout
-            loading={loading}
+            disableDataEntry={loading || !!error}
             mode="annual"
             view={view}
             onViewChange={(v) => setView(v)}

@@ -14,7 +14,7 @@ import Topbar from "./Topbar";
 export type ModeType = "annual" | "monthly";
 
 export interface LayoutProps {
-    loading: boolean;
+    disableDataEntry: boolean;
     mode: ModeType;
     view: ViewEnum;
     onViewChange: (view: ViewEnum) => void;
@@ -30,7 +30,7 @@ export interface LayoutProps {
 }
 
 const Layout = ({
-    loading,
+    disableDataEntry,
     mode,
     view,
     onViewChange,
@@ -122,7 +122,7 @@ const Layout = ({
                         </LabelledSelect>
                     </ResponsiveBox>
                     <ResponsiveButton
-                        disabled={loading}
+                        disabled={disableDataEntry}
                         onClick={() => setShowEntryModal(true)}
                         style={{
                             marginLeft: "auto",

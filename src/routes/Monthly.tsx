@@ -132,7 +132,7 @@ const Monthly = () => {
 
     return (
         <Layout
-            loading={loading}
+            disableDataEntry={loading || !!error}
             mode="monthly"
             view={view}
             onViewChange={(v) => setView(v)}
