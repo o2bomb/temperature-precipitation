@@ -2,6 +2,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Box from "components/Box";
 import Button from "components/Button";
+import Footer from "components/Footer";
 import LabelledSelect, { Option } from "components/LabelledSelect";
 import { Toggle } from "components/Toggle";
 import { CountryEnum, PeriodEnum, ViewEnum } from "pure/enums";
@@ -132,6 +133,7 @@ const Layout = ({
                     </ResponsiveButton>
                 </ResponsiveBox>
             </Main>
+            <Footer />
             <ReactModal
                 shouldCloseOnEsc
                 shouldCloseOnOverlayClick
