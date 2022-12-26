@@ -46,6 +46,68 @@ export default async function getWeather<T extends DataType>(
 
     if (!countryData) throw new Error("Failed to get weather data.");
 
+    if (country === CountryEnum.Yugoslavia) {
+        const yugsResp: ResponseType<DataType> = [];
+        const gcmList = Object.values(GCMEnum) as GCMEnum[];
+        const countryList = Object.values(CountryEnum).filter(
+            (c) => c !== CountryEnum.Yugoslavia,
+        ) as CountryEnum[];
+
+        const allData: ResponseType<T>[] = [];
+        for (let j = 0; j < countryList.length; j++) {
+            const raw = await getWeather(type, countryList[j], view, period);
+            allData.push(raw);
+        }
+
+        for (let i = 0; i < gcmList.length; i++) {
+            switch (type) {
+                case "annualavg": {
+                    const entry: AnnualData = {
+                        gcm: gcmList[i],
+                        variable,
+                        fromYear: periodObj.start,
+                        toYear: periodObj.end,
+                        annualData: [0],
+                    };
+
+                    // Get annual value per gcm by getting the annual gcm data of all countries and averaging them out
+                    for (let j = 0; j < countryList.length; j++) {
+                        const gcmData = allData[j][i] as AnnualData;
+                        entry.annualData[0] += gcmData.annualData[0];
+                    }
+                    entry.annualData[0] = entry.annualData[0] / countryList.length;
+                    (yugsResp as AnnualDataCollection).push(entry);
+                    break;
+                }
+                case "mavg": {
+                    const entry: MonthlyData = {
+                        gcm: gcmList[i],
+                        variable,
+                        fromYear: periodObj.start,
+                        toYear: periodObj.end,
+                        monthVals: new Array(12).fill(0),
+                    };
+
+                    // Get monthly value per gcm by getting the monthly gcm data of all countries and averaging them out
+                    for (let j = 0; j < countryList.length; j++) {
+                        const gcmData = allData[j][i] as MonthlyData;
+                        for (let k = 0; k < gcmData.monthVals.length; k++) {
+                            entry.monthVals[k] += gcmData.monthVals[k];
+                        }
+                    }
+                    for (let j = 0; j < entry.monthVals.length; j++) {
+                        entry.monthVals[j] = entry.monthVals[j] / countryList.length;
+                    }
+
+                    (yugsResp as MonthlyDataCollection).push(entry);
+                    break;
+                }
+            }
+        }
+
+        return yugsResp as ResponseType<T>;
+    }
+
     const raw = await fetch(
         `${API_ENDPOINT}/country/${type}/${variable}/${periodObj.start}/${periodObj.end}/${countryData.iso_code}`,
     );
