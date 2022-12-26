@@ -113,7 +113,7 @@ const Annual = () => {
                     }}
                     centerItems
                 >
-                    <p>Loading weather data...</p>
+                    <p className="loading-text">Loading weather data</p>
                 </Box>
             );
         }
