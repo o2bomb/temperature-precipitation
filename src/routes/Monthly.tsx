@@ -127,11 +127,12 @@ const Monthly = () => {
             );
         }
 
-        return <MonthlyTable data={data} />;
-    }, [data, error, loading, navigate]);
+        return <MonthlyTable data={data} view={view} />;
+    }, [data, error, loading, navigate, view]);
 
     return (
         <Layout
+            loading={loading}
             mode="monthly"
             view={view}
             onViewChange={(v) => setView(v)}

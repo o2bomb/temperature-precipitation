@@ -179,6 +179,7 @@ const Annual = () => {
 
     return (
         <Layout
+            loading={loading}
             mode="annual"
             view={view}
             onViewChange={(v) => setView(v)}

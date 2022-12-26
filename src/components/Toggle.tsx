@@ -20,6 +20,7 @@ export const Toggle = ({ options, value, onChange, fullWidth, style, ...props }:
                 borderRadius: ".7rem",
                 backgroundColor: "#111827aa",
                 width: fullWidth ? "100%" : undefined,
+                whiteSpace: "nowrap",
                 ...style,
             }}
             {...props}

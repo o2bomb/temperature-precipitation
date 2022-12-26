@@ -14,6 +14,7 @@ import Topbar from "./Topbar";
 export type ModeType = "annual" | "monthly";
 
 export interface LayoutProps {
+    loading: boolean;
     mode: ModeType;
     view: ViewEnum;
     onViewChange: (view: ViewEnum) => void;
@@ -29,6 +30,7 @@ export interface LayoutProps {
 }
 
 const Layout = ({
+    loading,
     mode,
     view,
     onViewChange,
@@ -65,9 +67,11 @@ const Layout = ({
                     <ResponsiveToggle
                         options={[
                             {
+                                label: `${ViewEnum.Temperature} (℃)`,
                                 value: ViewEnum.Temperature,
                             },
                             {
+                                label: `${ViewEnum.Precipitation} (mm)`,
                                 value: ViewEnum.Precipitation,
                             },
                         ]}
@@ -118,6 +122,7 @@ const Layout = ({
                         </LabelledSelect>
                     </ResponsiveBox>
                     <ResponsiveButton
+                        disabled={loading}
                         onClick={() => setShowEntryModal(true)}
                         style={{
                             marginLeft: "auto",

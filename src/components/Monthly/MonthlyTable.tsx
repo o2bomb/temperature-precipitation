@@ -5,11 +5,12 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { ProcessedMonthlyData, ProcessedMonthlyDataCollection } from "helpers/getWeather";
-import { MonthEnum } from "pure/enums";
+import { MonthEnum, ViewEnum } from "pure/enums";
 import styled from "styled-components";
 
 export interface MonthlyTableProps {
     data: ProcessedMonthlyDataCollection;
+    view: ViewEnum;
 }
 
 const columnHelper = createColumnHelper<ProcessedMonthlyData>();
@@ -69,7 +70,7 @@ const columns = [
     }),
 ];
 
-export const MonthlyTable = ({ data }: MonthlyTableProps) => {
+export const MonthlyTable = ({ data, view }: MonthlyTableProps) => {
     const table = useReactTable({
         data,
         columns,
